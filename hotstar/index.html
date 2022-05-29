@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotstar I</title>
+    <style>
+        #result {
+            /* border: 2px solid red; */
+            height: 295px;
+            width: 370px;
+            overflow-y: auto;
+            margin: auto;
+        }
+
+        #navbar {
+            height: 135px;
+            border: 3px solid blue;
+            /* background-image: url("https://cdn.mos.cms.futurecdn.net/ATmwtAuPJc4jPt9nDUHENm.jpg"); */
+            color: aliceblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background-color: black;
+        }
+
+        #input {
+            display: block;
+            /* justify-content: center; */
+            background: rgb(198, 249, 246);
+            margin: auto;
+            color: rgb(12, 12, 12);
+            height: 34px;
+            width: 329px;
+            font-size: 25px;
+            /* margin-bottom: 23px; */
+            margin-top: 10%;
+        }
+
+        .card {
+            border: 1px solid brown;
+            height: 90px;
+            width: 90%;
+            display: grid;
+            grid-template-columns: 30% 70%;
+            grid-template-rows: 100%;
+            gap: 5px;
+            margin: auto;
+        }
+
+        .image {
+            height: 100%;
+            width: 100%;
+        }
+
+        .p {
+            font-weight: bolder;
+            color: white;
+            background-color: rgba(24, 21, 17, 0.208);
+            height: 100%;
+            display: flex;
+            /* justify-content: center; */
+            /* align-items: center; */
+        }
+
+        body {
+            background-image: url("https://www.freepnglogos.com/uploads/hotstar-logo-png/hotstar-logo-0.jpg");
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <div id="navbar">
+            <h1>HOTSTAR</h1>
+        </div>
+
+        <input oninput="debouncing(main,1000)" type="text" id="input" placeholder="Enter movie">
+        <div id="result">
+
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    let api_key = "7d402821"
+    let id;
+
+    // link api_key
+    async function search(query) {
+        let link = `http://www.omdbapi.com/?s=${query}&apikey=7d402821`
+        let res = await fetch(link)
+        let data = await res.json()
+        displaydata(data.Search)
+        // console.log(data.Search)
+    }
+// call input fnc
+    function main() {
+        let query = document.getElementById("input").value
+        // console.log(query)
+        search(query)
+    }
+
+    // append to dom
+
+    function displaydata(movie) {
+        if (movie == undefined) {
+            return false
+        }
+        // console.log(movie)
+        let result = document.getElementById("result")
+        result.innerHTML = null
+        movie.forEach(function (el) {
+            // console.log(el)
+            let card = document.createElement("div")
+            card.setAttribute("class", "card")
+            let p = document.createElement("p")
+            p.setAttribute("class", "p")
+            p.innerText = el.Title
+            let image = document.createElement("img")
+            image.setAttribute("class", "image")
+            image.src = el.Poster
+            image.alt = "Poster Not Available"
+            // console.log(p)
+            card.append(image, p)
+            result.append(card)
+        })
+    }
+    // debouncing/throthling
+    function debouncing(func, delay) {
+        if (id) {
+            clearTimeout(id)
+        }
+        id = setTimeout(function () {
+            func()
+        }, delay)
+    }
+
+
+</script>
